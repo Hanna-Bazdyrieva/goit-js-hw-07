@@ -7,8 +7,6 @@ galleryPerentEl.insertAdjacentHTML("beforeend", galleryItemsMarkup);
 
 galleryPerentEl.addEventListener("click", getOriginalImg);
 
-
-
 function createGallaryItemsMarkup() {
   const galleryItemMerkup = galleryItems
     .map(
@@ -42,32 +40,20 @@ function getOriginalImg(event) {
 function openModalOriginalImage(event) {
   const imgPreviewOriginalURL = event.target.dataset.source;
   const imgAlt = event.target.getAttribute("alt");
-  
   const modalOriginalImage = basicLightbox.create(`
     <img src="${imgPreviewOriginalURL}" alt="${imgAlt}"></img>`);
-  
+
   modalOriginalImage.show();
+  
+  const modalCloseOnEscapeKeydown = (event) => {
+    event.preventDefault();
 
-  if (modalOriginalImage.visible()) {
-    console.log('open');
-    
-    document.addEventListener("keydown", (event) =>
-      modalCloseOnEscapeKeydown(event, modalOriginalImage),
-    );
-  }
+    if (event.code === "Escape") {
+      modalOriginalImage.close();
+      document.removeEventListener("keydown", modalCloseOnEscapeKeydown);
+    }
+  };
+
+  document.addEventListener("keydown", modalCloseOnEscapeKeydown);
 }
 
-
-function modalCloseOnEscapeKeydown(event, modalOriginalImage) {
-  event.preventDefault();
-  console.log(event.code);
-  if (event.code === "Escape") { modalOriginalImage.close()
-  }
- ;
-  // document.removeEventListener("keydown", (event) => modalCloseOnEscapeKeydown(event, modalOriginalImage));
-}
-
-// Додай закриття модального вікна після натискання клавіші Escape.Зроби так, щоб
-// прослуховування клавіатури було тільки доти, доки відкрите модальне вікно.
-
-// Бібліотека basicLightbox містить метод для програмного закриття модального вікна
